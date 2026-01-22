@@ -1,25 +1,25 @@
-import { Button } from "@/components/ui/button";
+import { HeroSection } from "@/components/custom/hero-section";
+import { FeaturesSection } from "@/components/custom/features-section";
+import { TBlocks, THeroSection, TFeaturesSection } from "@/types";
+import { loaders } from "@/data/loaders";
 
-async function getHomeData(path: string) {
-  const baseUrl = "http://localhost:1337";
-  try {
-    const res = await fetch(baseUrl + path);
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.error(error);
-    return null;
+function blockRenderer(block: TBlocks, index: number) {
+  switch (block.__component) {
+    case "layout.hero-section":
+      return <HeroSection key={index} data={block as THeroSection} />;
+    case "layout.features-section":
+      console.log("Sections data:", block);
+      return (
+        <FeaturesSection key={index} data={block as TFeaturesSection} />
+      );
+    default:
+      return null;
   }
 }
 
 export default async function Home() {
+  const strapiData = await loaders.getHomePageData();
+  const blocks = strapiData.data?.blocks || [];
 
-  const homeData = await getHomeData("/api/home-page");
-
-  return (
-    <>
-      <h1>{homeData.data.title}</h1>
-      <p>{homeData.data.description}</p>
-    </>
-  );
+  return <main>{blocks.map((block: TBlocks, index: number) => blockRenderer(block, index))}</main>;
 }
