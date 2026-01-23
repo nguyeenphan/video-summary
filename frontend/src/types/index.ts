@@ -82,12 +82,8 @@ export type TBlocks = THeroSection | TFeaturesSection;
   };
   
   export type TMetaData = {
-    documentId: string;
     title: string;
     description: string;
-    createdAt: string;
-    updatedAt: string;
-    publishedAt: string;
   };
   
   export type TSummary = {
